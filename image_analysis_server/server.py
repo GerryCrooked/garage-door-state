@@ -7,6 +7,7 @@ import json
 import os
 import logging
 from dotenv import load_dotenv
+from io import BytesIO
 
 # .env-Datei laden
 load_dotenv()
@@ -16,12 +17,10 @@ MQTT_BROKER = os.getenv("MQTT_BROKER")
 MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 MQTT_USERNAME = os.getenv("MQTT_USERNAME")
 MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
+DEVICE_MODEL = os.getenv("DEVICE_MODEL", "Default Model")
+DEVICE_MANUFACTURER = os.getenv("DEVICE_MANUFACTURER", "Default Manufacturer")
 CONFIG_TOPIC = "homeassistant/sensor/garage_door_status/config"
 STATE_TOPIC = "homeassistant/sensor/garage_door_status/state"
-# DEVICE Konfiguration
-DEVICE_MODEL = os.getenv("DEVICE_MODEL", "Default Model")  # Standardwert "Default Model"
-DEVICE_MANUFACTURER = os.getenv("DEVICE_MANUFACTURER", "Default Manufacturer")  # Standardwert "Default Manufacturer"
-
 
 # Logging-Konfiguration für Fehlerprotokoll
 logging.basicConfig(filename='connection.log', level=logging.ERROR,
@@ -59,22 +58,21 @@ except Exception as e:
     print("Fehler bei der Verbindung zum MQTT-Broker:", str(e))
     logging.error("Fehler bei der Verbindung zum MQTT-Broker: " + str(e))
 
-# Konfigurationsnachricht für MQTT Discovery
+# Konfigurationsnachricht für MQTT Discovery (ohne value_template)
 config_payload = {
     "name": "Garagentor Status",
     "state_topic": STATE_TOPIC,
     "unit_of_measurement": "",
-    "value_template": "{{ value_json.status }}",
     "unique_id": "garage_door_status_sensor",
     "device": {
         "identifiers": ["garage_door_sensor"],
         "name": "Garage Door Sensor",
-        "model": "DEVICE_MODEL",
-        "manufacturer": "DEVICE_MANUFACTURER"
+        "model": DEVICE_MODEL,
+        "manufacturer": DEVICE_MANUFACTURER
     }
 }
 
-# Sende die Konfigurationsnachricht für Discovery
+# Sende die Konfigurationsnachricht an MQTT Discovery
 mqtt_client.loop_start()
 mqtt_client.publish(CONFIG_TOPIC, json.dumps(config_payload), retain=True)
 mqtt_client.loop_stop()
@@ -85,8 +83,11 @@ def analyze_image():
     if 'file' not in request.files:
         return jsonify({"error": "No file provided"}), 400
 
-    # Bild vorbereiten
-    img = image.load_img(request.files['file'], target_size=(224, 224))
+    # Lade das Bild aus dem Upload als BytesIO-Objekt
+    file = request.files['file']
+    img = image.load_img(BytesIO(file.read()), target_size=(224, 224))
+    
+    # Bild in ein Numpy-Array konvertieren und skalieren
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0) / 255.0
 
@@ -94,8 +95,8 @@ def analyze_image():
     prediction = model.predict(img_array)
     status = "open" if prediction[0] > 0.5 else "closed"
 
-    # Ergebnis über MQTT senden
-    mqtt_client.publish(STATE_TOPIC, json.dumps({"status": status}))
+    # Ergebnis über MQTT senden (als Text und mit retain=True)
+    mqtt_client.publish(STATE_TOPIC, status, retain=True)
 
     # Ergebnis als Antwort zurückgeben
     return jsonify({"status": status})
