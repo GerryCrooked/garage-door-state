@@ -1,0 +1,7 @@
+services:
+  image_analysis_server:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./garage_door_model.keras:/app/garage_door_model.keras
