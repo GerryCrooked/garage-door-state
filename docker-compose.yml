@@ -6,3 +6,5 @@ services:
       - "5000:5000"
     volumes:
       - ./image_analysis_server/:/app/
+    env_file:
+      - .env 
