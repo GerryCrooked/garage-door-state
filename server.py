@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Modell laden
-MODEL_PATH = "garage_door_model.keras"
+MODEL_PATH = "/app/garage_door_model.keras"
 model = tf.keras.models.load_model(MODEL_PATH)
 
 @app.route("/analyze", methods=["POST"])
