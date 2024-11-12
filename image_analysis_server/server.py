@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing import image
 import paho.mqtt.client as mqtt
 
 # MQTT-Konfiguration
-MQTT_BROKER = "192.168.5.10"  # IP-Adresse des MQTT-Brokers (Home Assistant)
+MQTT_BROKER = ${MQTT_BROKER}  # IP-Adresse des MQTT-Brokers (Home Assistant)
 MQTT_PORT = 1883
 MQTT_TOPIC = "home/garage/door_status"
 
