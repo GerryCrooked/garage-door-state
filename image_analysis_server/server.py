@@ -18,6 +18,10 @@ MQTT_USERNAME = os.getenv("MQTT_USERNAME")
 MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
 CONFIG_TOPIC = "homeassistant/sensor/garage_door_status/config"
 STATE_TOPIC = "homeassistant/sensor/garage_door_status/state"
+# DEVICE Konfiguration
+DEVICE_MODEL = os.getenv("DEVICE_MODEL", "Default Model")  # Standardwert "Default Model"
+DEVICE_MANUFACTURER = os.getenv("DEVICE_MANUFACTURER", "Default Manufacturer")  # Standardwert "Default Manufacturer"
+
 
 # Logging-Konfiguration für Fehlerprotokoll
 logging.basicConfig(filename='connection.log', level=logging.ERROR,
@@ -65,8 +69,8 @@ config_payload = {
     "device": {
         "identifiers": ["garage_door_sensor"],
         "name": "Garage Door Sensor",
-        "model": "Custom Model",
-        "manufacturer": "Your Company"
+        "model": "DEVICE_MODEL",
+        "manufacturer": "DEVICE_MANUFACTURER"
     }
 }
 
