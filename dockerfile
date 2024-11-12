@@ -5,6 +5,6 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install flask pillow numpy
+RUN pip install --ignore-installed flask pillow numpy
 
 CMD ["python", "server.py"]
