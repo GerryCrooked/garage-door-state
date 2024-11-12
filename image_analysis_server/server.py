@@ -11,7 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # MQTT-Konfiguration
-MQTT_BROKER = os.getenv("MQTT_BROKER")  # IP-Adresse des MQTT-Brokers (aus .env-Datei)
+MQTT_BROKER = os.getenv("MQTT_BROKER")  # IP-Adresse des MQTT-Brokers (Home Assistant)
+MQTT_USERNAME = os.getenv("MQTT_USERNAME")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
 MQTT_PORT = 1883
 CONFIG_TOPIC = "homeassistant/sensor/garage_door_status/config"
 STATE_TOPIC = "homeassistant/sensor/garage_door_status/state"
