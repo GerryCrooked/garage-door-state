@@ -108,7 +108,7 @@ def analyze_image():
     # Vorhersage
     try:
         prediction = model.predict(img_array)
-        probability = prediction[0][0]  # Annahme: Das Modell gibt eine Wahrscheinlichkeit für "open" zurück
+        probability = float(prediction[0][0])  # Umwandlung in float für JSON-Kompatibilität
         status = "open" if probability > 0.5 else "closed"
         log_message = f"POST /analyze - Entscheidung: {status}, Vorhersagewahrscheinlichkeit: {probability:.2f}"
         print(log_message)
@@ -120,6 +120,7 @@ def analyze_image():
     # MQTT-Veröffentlichung
     try:
         mqtt_client.publish(STATE_TOPIC, status, retain=True)
+        logging.info("Nachricht erfolgreich veröffentlicht.")
     except Exception as e:
         logging.error(f"Error publishing MQTT message: {str(e)}")
         return jsonify({"error": "Failed to publish MQTT message"}), 500
