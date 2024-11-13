@@ -7,6 +7,11 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads'
 DATASET_FOLDER = '../dataset'
 
+# Stelle sicher, dass die Ordner existieren
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(os.path.join(DATASET_FOLDER, 'open'), exist_ok=True)
+os.makedirs(os.path.join(DATASET_FOLDER, 'closed'), exist_ok=True)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -26,8 +31,12 @@ def action(action, filename):
     if action in ['open', 'closed']:
         dest = os.path.join(DATASET_FOLDER, action, filename)
         shutil.move(source, dest)
-    elif action == 'retrain':
-        os.system('./retrain.sh')
+    return redirect(url_for('index'))
+
+@app.route('/retrain', methods=['POST'])
+def retrain():
+    # Starte das Retraining
+    os.system('./retrain.sh')
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
