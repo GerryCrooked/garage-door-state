@@ -17,7 +17,6 @@ services:
     build: ./image_analysis_server
     volumes:
       - ./model:/app/model
-    environment:
     env_file:
       - .env 
     restart: unless-stopped
