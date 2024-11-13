@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Bildklassifizierung</title>
+</head>
+<body>
+    <h1>Bilder hochladen</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Hochladen">
+    </form>
+    <h2>Vorschau</h2>
+    {% for image in images %}
+    <div>
+        <img src="{{ url_for('static', filename='uploads/' + image) }}" width="200">
+        <br>
+        <a href="{{ url_for('action', action='open', filename=image) }}">Open</a>
+        <a href="{{ url_for('action', action='closed', filename=image) }}">Closed</a>
+        <a href="{{ url_for('action', action='retrain', filename=image) }}">Retrain</a>
+    </div>
+    {% endfor %}
+</body>
+</html>
