@@ -1,10 +1,18 @@
-
+# Basis-Image mit TensorFlow
 FROM tensorflow/tensorflow:latest
 
+# Arbeitsverzeichnis setzen
 WORKDIR /app
 
+# Kopiere alle Dateien ins Arbeitsverzeichnis
 COPY . /app
 
-RUN pip install --ignore-installed flask pillow numpy paho-mqtt python-dotenv
+# Aktualisiere pip auf die neueste Version
+RUN python3 -m pip install --upgrade pip
 
+# Installiere alle Abhängigkeiten aus requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Startkommando für den Container
 CMD ["python", "server.py"]
