@@ -9,3 +9,4 @@ services:
       - ./image_analysis_server/:/app/
     env_file:
       - .env 
+    restart: unless-stopped
