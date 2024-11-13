@@ -3,22 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Bildklassifizierung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .image-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .image-container img {
+            max-width: 200px;
+            max-height: 200px;
+        }
+        .buttons {
+            margin-top: 5px;
+        }
+        .buttons a, .buttons form {
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .buttons a {
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: #008CBA;
+            color: white;
+            border-radius: 5px;
+        }
+        .buttons a:hover {
+            background-color: #005f6b;
+        }
+        .buttons input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .buttons input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h1>Bilder hochladen</h1>
     <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
+        <input type="file" name="file" required>
         <input type="submit" value="Hochladen">
     </form>
     <h2>Vorschau</h2>
-    {% for image in images %}
     <div>
-        <img src="{{ url_for('static', filename='uploads/' + image) }}" width="200">
-        <br>
-        <a href="{{ url_for('action', action='open', filename=image) }}">Open</a>
-        <a href="{{ url_for('action', action='closed', filename=image) }}">Closed</a>
-        <a href="{{ url_for('action', action='retrain', filename=image) }}">Retrain</a>
-    </div>
+    {% for image in images %}
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Bild">
+            <div class="buttons">
+                <a href="{{ url_for('action', action='open', filename=image) }}">Open</a>
+                <a href="{{ url_for('action', action='closed', filename=image) }}">Closed</a>
+            </div>
+        </div>
     {% endfor %}
+    </div>
+    <h2>Modell retrainieren</h2>
+    <form action="{{ url_for('retrain') }}" method="post">
+        <input type="submit" value="Retrain">
+    </form>
 </body>
 </html>
