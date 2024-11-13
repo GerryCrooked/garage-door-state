@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY ./app /app
 COPY retrain.sh /app
+COPY retrain.py /app
 COPY requirements.txt /app
 
 RUN apt-get update && apt-get install -y \
