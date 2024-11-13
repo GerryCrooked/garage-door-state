@@ -1,12 +1,23 @@
 services:
-  image_analysis_server:
-    container_name: image_analysis_server
-    image: alpine:latest
-    build: .
+  webserver:
+    build: ./webserver
+    volumes:
+      - ./webserver/app:/app
+      - ./webserver/static/uploads:/app/static/uploads
+      - ./model:/app/model
+      - ./dataset:/dataset
     ports:
       - "5000:5000"
+    environment:
+      - TZ=Europe/Berlin
+    depends_on:
+      - image_analyzer
+
+  image_analyzer:
+    build: ./image_analysis_server
     volumes:
-      - ./image_analysis_server/:/app/
+      - ./model:/app/model
+    environment:
     env_file:
       - .env 
     restart: unless-stopped
