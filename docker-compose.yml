@@ -1,6 +1,7 @@
 services:
   image_analysis_server:
-    image: alpine
+    container_name: image_analysis_server
+    image: alpine:latest
     build: .
     ports:
       - "5000:5000"
