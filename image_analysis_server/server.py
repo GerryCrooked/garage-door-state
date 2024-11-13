@@ -58,11 +58,12 @@ except Exception as e:
     print("Fehler bei der Verbindung zum MQTT-Broker:", str(e))
     logging.error("Fehler bei der Verbindung zum MQTT-Broker: " + str(e))
 
-# Konfigurationsnachricht für MQTT Discovery (ohne value_template)
+# Konfigurationsnachricht für MQTT Discovery
 config_payload = {
     "name": "Garagentor Status",
     "state_topic": STATE_TOPIC,
-    "unit_of_measurement": "",
+    "payload_on": "open",
+    "payload_off": "closed",
     "unique_id": "garage_door_status_sensor",
     "device": {
         "identifiers": ["garage_door_sensor"],
