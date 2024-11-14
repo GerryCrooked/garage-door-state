@@ -8,8 +8,8 @@ COPY requirements.txt /app
 RUN apt-get update && apt-get install -y \
     docker.io \
     && rm -rf /var/lib/apt/lists/*
-
-RUN pip install --upgrade pip --ignore-installed --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --ignore-installed --no-cache-dir -r requirements.txt
 
 RUN chmod +x /app/retrain.sh
 
