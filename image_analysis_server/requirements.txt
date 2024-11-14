@@ -5,3 +5,4 @@ opencv-python==4.8.0.74
 Flask==2.2.5
 python-dotenv
 h5py==3.7.0
+scipy==1.10.1
