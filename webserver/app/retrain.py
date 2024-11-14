@@ -7,11 +7,14 @@ from tensorflow.keras import layers, models
 import numpy as np
 
 def retrain_model(open_dir, closed_dir, model_path):
-    # Parameter überprüfen
+    print("TensorFlow Version:", tf.__version__)
+    print("Keras Version:", tf.keras.__version__)
+
+    # Überprüfe, ob die angegebenen Dataset-Ordner existieren
     if not os.path.exists(open_dir) or not os.path.exists(closed_dir):
         print("Die angegebenen Dataset-Ordner existieren nicht.")
         sys.exit(1)
-    
+
     # Bilddaten vorbereiten
     batch_size = 32
     img_height = 180
@@ -40,12 +43,13 @@ def retrain_model(open_dir, closed_dir, model_path):
     )
 
     # Modell laden oder neues Modell erstellen
-    if os.path.exists(model_path):
+    model_exists = os.path.exists(model_path)
+    if model_exists:
         print("Lade vorhandenes Modell...")
         model = load_model(model_path)
     else:
         print("Erstelle neues Modell...")
-        num_classes = 1  # Binary Classification
+        num_classes = 1  # Binäre Klassifikation
         model = models.Sequential([
             layers.InputLayer(input_shape=(img_height, img_width, 3)),
             layers.Conv2D(16, 3, padding='same', activation='relu'),
@@ -71,8 +75,8 @@ def retrain_model(open_dir, closed_dir, model_path):
         epochs=epochs
     )
 
-    # Modell speichern
-    model.save(model_path)
+    # Modell speichern im HDF5-Format
+    model.save(model_path, save_format='h5')
     print(f"Modell gespeichert unter {model_path}")
 
 if __name__ == "__main__":
