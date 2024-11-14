@@ -30,7 +30,7 @@ logging.basicConfig(filename='connection.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Modell laden
-MODEL_PATH = "/app/garage_door_model.keras"
+MODEL_PATH = "/app/model/garage_door_model.keras"
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # MQTT-Client initialisieren und Konfigurationsnachricht festlegen
