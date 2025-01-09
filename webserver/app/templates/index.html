@@ -26,13 +26,16 @@
         </div>
 
         <!-- Actions -->
-        <div class="d-flex justify-content-between mb-4">
-            <a href="/retrain" class="btn btn-primary">Retrain Model</a>
-            <a href="/download_model" class="btn btn-success">Download Model</a>
-            <a href="/download_dataset" class="btn btn-success">Download Current Dataset</a>
-                <form action="/delete_dataset" method="POST" onsubmit="return confirm('Sind Sie sicher, dass Sie das aktuelle Dataset löschen möchten?');">
-                    <button type="submit" class="btn btn-danger">Delete Current Dataset</button>
-            <a href="/last_prediction" class="btn btn-secondary">View Last Prediction</a>
+        <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 16px;">
+                <form action="/retrain" method="post">
+                        <button type="submit" class="btn btn-primary">Retrain Model</button>
+                </form>
+                <a href="/download_model" class="btn btn-success">Download Model</a>
+                <a href="/download_dataset" class="btn btn-success">Download Current Dataset</a>
+                <form action="/delete_dataset" method="POST" onsubmit="return confirm('Are you sure you want to delete the current dataset?');">
+                        <button type="submit" class="btn btn-danger">Delete Current Dataset</button>
+                </form>
+                <a href="/last_prediction" class="btn btn-secondary">View Last Prediction</a>
         </div>
 
         <!-- Image Gallery -->
