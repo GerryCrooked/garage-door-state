@@ -1,0 +1,25 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Kopiere den bestehenden Webserver-Code
+COPY app /app/
+COPY requirements.txt /app/
+
+# Install Cron and other dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    apt-get update && \
+    apt-get install -y cron && \
+    apt-get clean
+RUN pip install --ignore-installed --no-cache-dir -r requirements.txt
+
+# create cron for Cleanup
+RUN echo "0 0 * * * python /app/cleanup.py >> /app/cleanup.log 2>&1" > /etc/cron.d/cleanup-cron && \
+    chmod 0644 /etc/cron.d/cleanup-cron && \
+    crontab /etc/cron.d/cleanup-cron
+
+# Start webserver and cron
+CMD ["sh", "-c", "cron && python /app/app.py"]
+
+# deactivate Watchtower auto updates
+LABEL com.centurylinklabs.watchtower.enable="false"

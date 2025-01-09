@@ -1,0 +1,14 @@
+services:
+  webserver:
+    build: ./webserver
+    volumes:
+      - ./webserver/app:/app
+      - ./webserver/static/uploads:/app/static/uploads
+      - ./webserver/app/templates:/app/templates 
+      - ./webserver/app/model:/app/model 
+      - ./webserver/app/dataset:/app/dataset
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env 
+    restart: unless-stopped

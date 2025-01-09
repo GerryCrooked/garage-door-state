@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garage Door State</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="bg-dark text-white text-center py-4 mb-4">
+            <h1>Garage Door State</h1>
+            <p class="lead">Manage, Train, and Monitor Your Garage Door Model</p>
+        </header>
+
+        <!-- Upload Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Upload New Images</h5>
+                <form action="/" method="POST" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
+                    <input type="file" name="files" multiple class="form-control mb-3" required>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-between mb-4">
+            <a href="/retrain" class="btn btn-primary">Retrain Model</a>
+            <a href="/download_model" class="btn btn-success">Download Model</a>
+            <a href="/download_dataset" class="btn btn-success">Download Current Dataset</a>
+                <form action="/delete_dataset" method="POST" onsubmit="return confirm('Sind Sie sicher, dass Sie das aktuelle Dataset löschen möchten?');">
+                    <button type="submit" class="btn btn-danger">Delete Current Dataset</button>
+            <a href="/last_prediction" class="btn btn-secondary">View Last Prediction</a>
+        </div>
+
+        <!-- Image Gallery -->
+        <h3 class="mb-3">Uploaded Images ({{ image_count }})</h3>
+        <div class="row g-4">
+            {% for image in images %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <img src="static/uploads/{{ image }}" class="card-img-top" alt="Image">
+                    <div class="card-body text-center">
+                        <div class="btn-group" role="group">
+                            <a href="/action/open/{{ image }}" class="btn btn-outline-success">Mark as Open</a>
+                            <a href="/action/closed/{{ image }}" class="btn btn-outline-danger">Mark as Closed</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3 mt-4">
+            <p>&copy; 2025 Garage Door State Project</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JavaScript (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
