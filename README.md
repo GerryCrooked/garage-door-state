@@ -126,6 +126,40 @@ binary_sensor:
     device_class: "door"
 ```
 
+### Automating Camera Snapshot Uploads
+
+Use the following automation to take a snapshot of a camera and upload it to the server:
+
+#### Home Assistant Automation
+
+```yaml
+automation:
+  - alias: Upload Garage Camera Snapshot
+    description: Takes a screenshot of the garage camera and uploads it to the server
+    trigger:
+      - platform: time_pattern
+        minutes: "/1"  # Run every minute
+    action:
+      - service: camera.snapshot
+        target:
+          entity_id: camera.garage_camera  # Replace with your camera entity
+        data:
+          filename: /config/www/garage_snapshot.jpg
+      - service: shell_command.upload_garage_snapshot
+```
+
+#### Shell Command in Home Assistant
+
+Add this to your `configuration.yaml` under the `shell_command` section:
+
+```yaml
+shell_command:
+  upload_garage_snapshot: >
+    if [ -f /config/www/garage_snapshot.jpg ]; then
+      rm /config/www/garage_snapshot.jpg;
+    fi && curl -X POST -F "file=@/config/www/garage_snapshot.jpg" http://<your-server-ip>:5000
+```
+
 ---
 
 ## Retraining the Model
